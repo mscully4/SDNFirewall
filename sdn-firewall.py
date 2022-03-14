@@ -39,17 +39,59 @@ def firewall_policy_processing(policies):
 
     rules = []
 
+    high = 32767
+    low = 1
+
     for policy in policies:
         # Enter your code here to implement matching and block/allow rules.  See the links
         # in Implementation Hints on how to do this. 
         # HINT:  Think about how to use the priority in your flow modification.
 
-        rule = None # Please note that you need to redefine this variable below to create a valid POX Flow Modification Object
+        rule = of.ofp_flow_mod()
+        # This will always be the case since we are focusing on IPv4
+        rule.match.dl_type = 0x800
 
+        # Matching on Source MAC Address
+        if policy['mac-src'] != '-':
+            rule.match.dl_src = EthAddr(policy['mac-src'])
+
+        # Matching on Destination MAC Address
+        if policy['mac-dst'] != '-':
+            rule.match.dl_dst = EthAddr(policy['mac-dst'])
+
+        # Matching on Source IP Address
+        if policy['ip-src'] != '-':
+            rule.match.nw_src = policy['ip-src']
+
+        # Matching on Destination IP Address
+        if policy['ip-dst'] != '-':
+            rule.match.nw_dst = policy['ip-dst']
+
+        # Matching on Source Port
+        if policy['port-src'] != '-':
+            rule.match.tp_src = int(policy['port-src'])
+
+        # Matching on Destination Port
+        if policy['port-dst'] != '-':
+            rule.match.tp_dst = int(policy['port-dst'])
+
+        # Matching on Protocol Type
+        if policy['ipprotocol'] != '-':
+            rule.match.nw_proto = int(policy['ipprotocol'])
+        
+        if policy['action'].lower() == "block":
+            low += 1
+            rule.priority = low
+        elif policy['action'].lower() == "allow":
+            rule.actions.append(of.ofp_action_output(port=65530))
+            high -= 1
+            rule.priority = high
+        else:
+            raise Exception("Action must be block or allow")
 
         # End Code Here
         print('Added Rule ',policy['rulenum'],': ',policy['comment'])
-        #print(rule)   #Uncomment this to debug your "rule"
+        # print(rule)   #Uncomment this to debug your "rule"
         rules.append(rule)
     
     return rules

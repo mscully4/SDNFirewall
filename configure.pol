@@ -24,5 +24,88 @@
 # subnet other than /32 must be 0.
 #
 # Example Rules:
-1,Block,-,-,10.0.0.1/32,10.0.1.0/24,6,-,80,Block 10.0.0.1 from accessing a web server on the 10.0.1.0/24 network
-2,Allow,-,-,10.0.0.1/32,10.0.1.125/32,6,-,80,Allow 10.0.0.1 to access a web server on 10.0.1.125 overriding previous rule
+#1,Block,-,-,10.0.0.1/32,10.0.1.0/24,6,-,80,Block 10.0.0.1 from accessing a web server on the 10.0.1.0/24 network
+#2,Allow,-,-,10.0.0.1/32,10.0.1.125/32,6,-,80,Allow 10.0.0.1 to access a web server on 10.0.1.125 overriding previous rule
+
+## Task 1
+1001,Allow,-,-,-,10.0.0.1/32,17,-,53,Allows all traffic to hq1's port 53
+1002,Allow,-,-,-,10.0.0.1/32,17,-,853,Allows all traffic to hq1's port 853
+1003,Block,-,-,-,10.0.0.2/32,17,-,53,Blocks all traffic to hq2's port 53
+1004,Block,-,-,-,10.0.0.2/32,17,-,853,Blocks all traffic to hq2's port 853
+1005,Allow,-,-,10.0.1.0/24,10.0.0.2/32,17,-,53,Allows all traffic to hq2's port 53 from US*
+1006,Allow,-,-,10.0.1.0/24,10.0.0.2/32,17,-,853,Allows all traffic to hq2's port 853 from US*
+1007,Allow,-,-,10.0.20.0/24,10.0.0.2/32,17,-,53,Allows all traffic to hq2's port 53 from in*
+1008,Allow,-,-,10.0.20.0/24,10.0.0.2/32,17,-,853,Allows all traffic to hq2's port 853 from in*
+1009,Allow,-,-,10.0.30.0/24,10.0.0.2/32,17,-,53,Allows all traffic to hq2's port 53 from CN*
+1010,Allow,-,-,10.0.30.0/24,10.0.0.2/32,17,-,853,Allows all traffic to hq2's port 853 from CN*
+1011,Allow,-,-,10.0.40.0/24,10.0.0.2/32,17,-,53,Allows all traffic to hq2's port 53 from UK*
+1012,Allow,-,-,10.0.40.0/24,10.0.0.2/32,17,-,853,Allows all traffic to hq2's port 853 from UK*
+1013,Allow,-,-,10.0.0.0/24,10.0.0.2/32,17,-,53,Allows all traffic to hq2's port 53 from hq*
+1013,Allow,-,-,10.0.0.0/24,10.0.0.2/32,17,-,853,Allows all traffic to hq2's port 853 from hq*
+
+## Task 2
+2001,Block,-,-,-,10.0.0.60/32,17,-,1194,Blocks all UDP traffic to hq3's port 1194
+2002,Block,-,-,-,10.0.0.60/32,6,-,1194,Blocks all TCP traffic to hq3's port 1194
+2003,Allow,-,-,10.0.1.33/32,10.0.0.60/32,17,-,1194,Allows UDP traffic from us3 to hq3's port 1194
+2004,Allow,-,-,10.0.1.33/32,10.0.0.60/32,6,-,1194,Allows TCP traffic from us3 to hq3's port 1194
+2005,Allow,-,-,10.0.20.3/32,10.0.0.60/32,17,-,1194,Allows UDP traffic from in3 to hq3's port 1194
+2006,Allow,-,-,10.0.20.3/32,10.0.0.60/32,6,-,1194,Allows TCP traffic from in3 to hq3's port 1194
+2007,Allow,-,-,10.0.30.3/32,10.0.0.60/32,17,-,1194,Allows UDP traffic from cn3 to hq3's port 1194
+2008,Allow,-,-,10.0.30.3/32,10.0.0.60/32,6,-,1194,Allows TCP traffic from cn3 to hq3's port 1194
+2009,Allow,-,-,10.0.40.129/32,10.0.0.60/32,17,-,1194,Allows UDP traffic from uk3 to hq3's port 1194
+2010,Allow,-,-,10.0.40.129/32,10.0.0.60/32,6,-,1194,Allows TCP traffic from uk3 to hq3's port 1194
+
+## Task 3
+3001,Block,-,-,-,10.0.1.0/24,1,-,-,Block all ICMP traffic to us*
+3002,Block,-,-,-,10.0.20.0/24,1,-,-,Block all ICMP traffic to in*
+3003,Block,-,-,-,10.0.30.0/24,1,-,-,Block all ICMP traffic to cn*
+3004,Block,-,-,-,10.0.40.0/24,1,-,-,Block all ICMP traffic to uk*
+3005,Allow,-,-,0.0.0.0/0,10.0.0.0/24,1,-,-,Allow all ICMP traffic to hq*
+
+## Task 4
+4001,Block,-,-,-,10.0.0.0/24,6,-,3389,Block all TCP traffic to hq* for port 3389
+4002,Block,-,-,-,10.0.0.0/24,6,-,5900,Block all TCP traffic to hq* for port 5900
+4003,Block,-,-,-,10.0.1.0/24,6,-,3389,Block all TCP traffic to us* for port 3389
+4004,Block,-,-,-,10.0.1.0/24,6,-,5900,Block all TCP traffic to us* for port 5900
+4005,Block,-,-,-,10.0.20.0/24,6,-,3389,Block all TCP traffic to in* for port 3389
+4006,Block,-,-,-,10.0.20.0/24,6,-,5900,Block all TCP traffic to in* for port 5900
+4007,Block,-,-,-,10.0.30.0/24,6,-,3389,Block all TCP traffic to cn* for port 3389
+4008,Block,-,-,-,10.0.30.0/24,6,-,5900,Block all TCP traffic to cn* for port 5900
+4009,Block,-,-,-,10.0.40.0/24,6,-,3389,Block all TCP traffic to uk* for port 3389
+4010,Block,-,-,-,10.0.40.0/24,6,-,5900,Block all TCP traffic to uk* for port 5900
+4011,Allow,-,-,10.0.1.0/24,10.0.0.0/24,6,-,3389,Allow TCP traffic from us* to hq* for port 3389
+4012,Allow,-,-,10.0.1.0/24,10.0.0.0/24,6,-,5900,Allow TCP traffic from us* to hq* for port 5900
+4013,Allow,-,-,10.0.20.0/24,10.0.0.0/24,6,-,3389,Allow TCP traffic from in* to hq* for port 3389
+4014,Allow,-,-,10.0.20.0/24,10.0.0.0/24,6,-,5900,Allow TCP traffic from in* to hq* for port 5900
+4015,Allow,-,-,10.0.30.0/24,10.0.0.0/24,6,-,3389,Allow TCP traffic from cn* to hq* for port 3389
+4016,Allow,-,-,10.0.30.0/24,10.0.0.0/24,6,-,5900,Allow TCP traffic from cn* to hq* for port 5900
+4017,Allow,-,-,10.0.40.0/24,10.0.0.0/24,6,-,3389,Allow TCP traffic from uk* to hq* for port 3389
+4018,Allow,-,-,10.0.40.0/24,10.0.0.0/24,6,-,5900,Allow TCP traffic from uk* to hq* for port 5900
+
+## Task 5
+5001,Block,-,-,10.0.40.128/25,10.0.1.33/32,6,-,8500,Block UK2-5 access to us3 TCP 8500
+5002,Block,-,-,10.0.40.128/25,10.0.1.33/32,17,-,8500,Block UK2-5 access to us3 UDP 8500
+5003,Block,-,-,10.0.40.128/25,10.0.1.34/32,6,-,8500,Block UK2-5 access to us4 TCP 8500
+5004,Block,-,-,10.0.40.128/25,10.0.1.34/32,17,-,8500,Block UK2-5 access to us4 UDP 8500
+
+5005,Block,-,-,10.0.20.64/26,10.0.1.33/32,6,-,8500,Block in4-5 access to us3 TCP 8500
+5006,Block,-,-,10.0.20.64/26,10.0.1.33/32,17,-,8500,Block in4-5 access to us3 UDP 8500
+5007,Block,-,-,10.0.20.64/26,10.0.1.34/32,6,-,8500,Block in4-5 access to us4 TCP 8500
+5008,Block,-,-,10.0.20.64/26,10.0.1.34/32,17,-,8500,Block in4-5 access to us4 UDP 8500
+
+5009,Block,-,-,10.0.0.220/32,10.0.1.33/32,6,-,8500,Block hq5 access to us3 TCP 8500
+5010,Block,-,-,10.0.0.220/32,10.0.1.33/32,17,-,8500,Block hq5 access to us3 UDP 8500
+5011,Block,-,-,10.0.0.220/32,10.0.1.34/32,6,-,8500,Block hq5 access to us4 TCP 8500
+5012,Block,-,-,10.0.0.220/32,10.0.1.34/32,17,-,8500,Block hq5 access to us4 UDP 8500
+
+5013,Block,-,-,10.0.1.125/32,10.0.1.33/32,6,-,8500,Block us5 access to us3 TCP 8500
+5014,Block,-,-,10.0.1.125/32,10.0.1.33/32,17,-,8500,Block us5 access to us3 UDP 8500
+5015,Block,-,-,10.0.1.125/32,10.0.1.34/32,6,-,8500,Block us5 access to us4 TCP 8500
+5016,Block,-,-,10.0.1.125/32,10.0.1.34/32,17,-,8500,Block us5 access to us4 UDP 8500
+
+## Task 6
+6001,Block,-,-,-,10.0.0.0/24,47,-,-,Block all GRE traffic to hq*
+6002,Block,-,-,-,10.0.1.0/24,47,-,-,Block all GRE traffic to us*
+6003,Block,-,-,-,10.0.20.0/24,47,-,-,Block all GRE traffic to in*
+6004,Block,-,-,-,10.0.30.0/24,47,-,-,Block all GRE traffic to cn*
+6005,Block,-,-,-,10.0.40.0/24,47,-,-,Block all GRE traffic to uk*
